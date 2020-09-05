@@ -77,5 +77,15 @@ app.patch(
   }
 );
 
+app.delete(
+  "/{id}",
+  async (req: expressive.Request, res: expressive.Response) => {
+    await res.json({
+      status: "success",
+      data: DataST.getInstance().deleteOneSimpleData(req.params.id),
+    });
+  }
+);
+
 const server = await app.listen(port);
 log.info(`> app listening at http://127.0.0.1:${port}`);
