@@ -56,5 +56,26 @@ app.get("/{id}", async (req: expressive.Request, res: expressive.Response) => {
   });
 });
 
+app.patch(
+  "/{id}",
+  async (req: expressive.Request, res: expressive.Response) => {
+    const { title, description } = JSON.parse(
+      new TextDecoder()
+        .decode(req.body)
+        .replace(/\0/g, "")
+        .split("\r\n\r\n")[1]
+        .replace(/\s/g, "")
+    );
+
+    await res.json({
+      status: "success",
+      data: DataST.getInstance().updateOneSimpleData(req.params.id, {
+        title,
+        description,
+      }),
+    });
+  }
+);
+
 const server = await app.listen(port);
 log.info(`> app listening at http://127.0.0.1:${port}`);
