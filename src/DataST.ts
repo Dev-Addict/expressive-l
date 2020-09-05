@@ -50,12 +50,16 @@ export default class DataST {
     id: string,
     simpleDataDto: SimpleDataDto
   ): SimpleData {
-    this.data = [
-      ...this.data.filter((simpleData) => simpleData.id !== id),
-      { id, ...simpleDataDto },
-    ];
+    const index = this.data.findIndex((simpleData) => simpleData.id === id);
 
-    return { id, ...simpleDataDto };
+    if (index === -1) throw new Error("Invalid id.");
+
+    if (simpleDataDto.title) this.data[index].title = simpleDataDto.title;
+
+    if (simpleDataDto.description)
+      this.data[index].description = simpleDataDto.description;
+
+    return this.data[index];
   }
 
   public deleteOneSimpleData(id: string): void {
