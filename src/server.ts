@@ -30,5 +30,24 @@ app.get("/", async (req: expressive.Request, res: expressive.Response) => {
   });
 });
 
+app.post("/", async (req: expressive.Request, res: expressive.Response) => {
+  const { title, description } = JSON.parse(
+    new TextDecoder()
+      .decode(req.body)
+      .replace(/\0/g, "")
+      .split("\r\n\r\n")[1]
+      .replace(/\s/g, "")
+  );
+
+  if (!title) throw new Error("Title is required.");
+
+  if (!description) throw new Error("Description is required.");
+
+  await res.json({
+    status: "success",
+    data: DataST.getInstance().addSimpleData({ title, description }),
+  });
+});
+
 const server = await app.listen(port);
 log.info(`> app listening at http://127.0.0.1:${port}`);
