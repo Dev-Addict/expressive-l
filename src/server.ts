@@ -6,6 +6,8 @@ const port: number = PORT || 3000;
 
 const app: expressive.App = new expressive.App();
 
+app.use(expressive.bodyParser.json());
+
 app.use(
   async (
     req: expressive.Request,
